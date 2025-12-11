@@ -1,447 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz do SHREK</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-     body {
-            font-family: 'Comic Neue', cursive;
-            background: linear-gradient(135deg, #2e7d32 0%, #558b2f 50%, #7cb342 100%);
-            min-height: 100vh;
-        }
-        
-        .shrek-theme {
-            background: linear-gradient(135deg, #8bc34a 0%, #689f38 100%);
-            border: 4px solid #795548;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(45deg, #ff6f00, #ff8f00);
-            border: 3px solid #e65100;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 111, 0, 0.4);
-        }
-        
-        .question-card {
-            background: #fff8e1;
-            border: 3px solid #ffd54f;
-            border-radius: 20px;
-        }
-        
-        .score-badge {
-            background: linear-gradient(45deg, #ffa000, #ff6f00);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .option-btn {
-            transition: all 0.3s ease;
-        }
-        
-        .option-btn:hover {
-            transform: translateX(10px);
-        }
-        
-        .correct {
-            background: linear-gradient(45deg, #4caf50, #66bb6a) !important;
-            color: white !important;
-        }
-        
-        .incorrect {
-            background: linear-gradient(45deg, #f44336, #ef5350) !important;
-            color: white !important;
-        }
-        
-        .character-shrek {
-            color: #8bc34a;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .character-burro {
-            color: #795548;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta-name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfólio - Meus Projetos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-    <div class="container mx-auto max-w-4xl">
-        <!-- Tela Inicial -->
-        <div id="start-screen" class="shrek-theme rounded-3xl p-8 text-center">
-            <div class="mb-8">
-                <h1 class="text-5xl md:text-6xl font-bold text-white mb-4">🎬 Quiz do Shrek</h1>
-                <p class="text-xl md:text-2xl text-yellow-200 mb-6">você sabe sobre o Shrek?</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-white rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold text-green-800 mb-4"></h3>
-                    <ul class="text-left space-y-2 text-gray-700">
-                        <li>• 10 perguntas sobre o Shrek</li>
-                        <li>• Escolha a resposta correta</li>
-                        <li>• Pontuação final no final</li>
-                        <li>• Divirta-se! 😁</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-yellow-100 rounded-2xl p-6">
-                    <h3 class="text-2xl font-bold text-amber-800 mb-4"></h3>
-                    <ul class="text-left space-y-2 text-gray-700">
-                        <li>• 0-5: Precisa assistir Shrek de novo!</li>
-                        <li>• 6-8: Verdadeiro fã </li>
-                        <li>• 9-10: Você É literalmente o Shrek!</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <button onclick="startQuiz()" class="btn-primary text-white text-2xl font-bold py-4 px-12 rounded-full">
-                Começar Quiz 👽
-            </button>
-        </div>
 
-        <!-- Tela do Quiz -->
-        <div id="quiz-screen" class="hidden">
-            <div class="flex justify-between items-center mb-6">
-                <div class="score-badge text-white text-xl font-bold py-2 px-6 rounded-full">
-                    Pontuação: <span id="score">0</span>
-                </div>
-                <div class="text-white text-xl font-bold">
-                    Pergunta <span id="current-question">1</span>/<span id="total-questions">10</span>
-                </div>
-            </div>
+<body>
 
-            <div class="question-card p-8 mb-8">
-                <h2 id="question-text" class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center"></h2>
-                
-                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Opções serão inseridas via JavaScript -->
-                </div>
-            </div>
-
-            <div class="text-center">
-                <button id="next-btn" onclick="nextQuestion()" class="btn-primary text-white text-xl font-bold py-3 px-8 rounded-full hidden">
-                    Próxima Pergunta →
-                </button>
-            </div>
-        </div>
-
-        <!-- Tela de Resultado -->
-        <div id="result-screen" class="hidden">
-            <div class="shrek-theme rounded-3xl p-8 text-center">
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">🎉 Quiz Concluído!</h2>
-                
-                <div class="bg-white rounded-2xl p-8 mb-8">
-                    <div class="text-6xl mb-4" id="final-emoji">🏆</div>
-                    <h3 class="text-3xl font-bold text-green-800 mb-4">Sua Pontuação</h3>
-                    <div class="text-5xl font-bold text-orange-600 mb-6">
-                        <span id="final-score">0</span>/10
-                    </div>
-                    <p id="result-message" class="text-xl text-gray-700"></p>
-                </div>
-
-                <div class="space-y-4">
-                    <button onclick="restartQuiz()" class="btn-primary text-white text-xl font-bold py-3 px-8 rounded-full mr-4">
-                        Jogar Novamente 🔄
-                    </button>
-                    <button onclick="showAnswers()" class="bg-gray-600 text-white text-xl font-bold py-3 px-8 rounded-full">
-                        Ver Respostas 📋
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tela de Respostas -->
-        <div id="answers-screen" class="hidden">
-            <div class="shrek-theme rounded-3xl p-8">
-                <h2 class="text-4xl font-bold text-white text-center mb-8">📋 Respostas Corretas</h2>
-                
-                <div id="answers-container" class="space-y-4">
-                    <!-- Respostas serão inseridas via JavaScript -->
-                </div>
-
-                <div class="text-center mt-8">
-                    <button onclick="restartQuiz()" class="btn-primary text-white text-xl font-bold py-3 px-8 rounded-full">
-                        Voltar ao Início 🏠
-                    </button>
-                </div>
-            </div>
-        </div>
+  <header class="topo">
+    <div class="titulo-container">
+      <h1 class="titulo-site">Portfólio</h1>
+      <span class="subtitulo">Conheça meus projetos e redes sociais</span>
     </div>
+  </header>
 
-    <script>
-        // Configuração do Quiz - FÁCIL DE MODIFICAR!
-        const quizConfig = {
-            questions: [
-                {
-                    question: "Qual é o nome completo de Shrek?",
-                    options: [
-                        "Shrek Ogro",
-                        "Shrek dos Pântanos",
-                        "Shrek não tem sobrenome",
-                        "Shrek Janson"
-                    ],
-                    correct: 2,
-                    explanation: "Shrek não tem um sobrenome oficial nos filmes!"
-                },
-                {
-                    question: "Qual personagem é o mais irritante?",
-                    options: [
-                        "Shrek",
-                        "Burro",
-                        "Lord Farquaad",
-                        "Gato de Botas"
-                    ],
-                    correct: 1,
-                    explanation: "O Burro! o melhor amigo falante de Shrek!"
-                },
-                {
-                    question: "O que Shrek mais valoriza em sua vida?",
-                    options: [
-                        "Dinheiro",
-                        "Solidão",
-                        "Fama",
-                        "A privacidade em pântano"
-                    ],
-                    correct: 3,
-                    explanation: "Shrek ama a privacidade e tranquilidade do seu pântano!"
-                },
-                {
-                    question: "Qual é a primeira tarefa que Lord Farquaad dá a Shrek?",
-                    options: [
-                        "Matar o dragão",
-                        "Resgatar a princesa",
-                        "Limpar o pântano",
-                        "Encontrar o espelho mágico"
-                    ],
-                    correct: 1,
-                    explanation: "Shrek precisa resgatar a princesa para ter seu pântano de volta!"
-                },
-                {
-                    question: "Qual destes NÃO é um personagem de Shrek?",
-                    options: [
-                        "Fiona",
-                        "Biscoito",
-                        "Rita",
-                        "rato cego"
-                    ],
-                    correct: 2,
-                    explanation: "rita é um personagem do filme Por água abaixo"
-                },
-                {
-                    question: "Qual é a verdade sobre o feitiço da Fiona?",
-                    options: [
-                        "Ela vira ogro ao escurecer",
-                        "Ela vira burro durante o dia",
-                        "Ela vira ogro durante o dia",
-                        "Ela vira humana à noite"
-                    ],
-                    correct: 0,
-                    explanation: "Fiona se transforma em ogro todas as noites devido à maldição!"
-                },
-                {
-                    question: "Qual destes personagens NÃO aparece no primeiro filme?",
-                    options: [
-                        "Gato de Botas",
-                        "Pinocchio",
-                        "Lobo Mau",
-                        "Três Porquinhos"
-                    ],
-                    correct: 0,
-                    explanation: "Gato de Botas só aparece a partir do segundo filme!"
-                },
-                {
-                    question: "O que Shrek diz que as cebolas têm?",
-                    options: [
-                        "Camadas",
-                        "Sabor",
-                        "Lágrimas",
-                        "Histórias"
-                    ],
-                    correct: 0,
-                    explanation: "Shrek diz que cebolas tem camadas!"
-                },
-                {
-                    question: "Qual é o nome do dragão no primeiro filme?",
-                    options: [
-                        "Draco",
-                        "Dragão Fêmea",
-                        "Smaugh",
-                        "Não tem nome"
-                    ],
-                    correct: 1,
-                    explanation: "O dragão é apenas chamado de 'Dragão Fêmea' no filme!"
-                },
-                {
-                    question: "Qual esta música NÃO faz parte da trilha sonora original?",
-                    options: [
-                        "All Star",
-                        "I'm a Believer",
-                        "Hallelujah",
-                        "Bad Reputation"
-                    ],
-                    correct: 2,
-                    explanation: "Hallelujah não está na trilha sonora original do primeiro filme!"
-                }
-            ]
-        };
+  <main class="conteudo-principal">
 
-        let currentQuestion = 0;
-        let score = 0;
-        let userAnswers = [];
+    <section class="secao-projetos">
+      <h2 class="secao-titulo">Projetos</h2>
 
-        function startQuiz() {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('quiz-screen').classList.remove('hidden');
-            document.getElementById('total-questions').textContent = quizConfig.questions.length;
-            showQuestion();
-        }
+      <!-- Projeto 1 -->
+      <div class="card-projeto">
+        <a class="link-projeto" href="https://www.alura.com.br" target="_blank">
+          Projeto 1 — Alura
+        </a>
+        <a class="link-aula" href="https://www.youtube.com/watch?v=VIDEO1" target="_blank">
+          📌 Aula do Projeto 1 (YouTube)
+        </a>
+      </div>
 
-        function showQuestion() {
-            const question = quizConfig.questions[currentQuestion];
-            document.getElementById('question-text').textContent = question.question;
-            document.getElementById('current-question').textContent = currentQuestion + 1;
-            
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
-                const button = document.createElement('button');
-                button.className = 'option-btn bg-white border-2 border-green-600 text-green-800 text-xl font-bold py-4 px-6 rounded-xl hover:bg-green-100 transition-all';
-                button.textContent = option;
-                button.onclick = () => selectAnswer(index);
-                optionsContainer.appendChild(button);
-            });
-            
-            document.getElementById('next-btn').classList.add('hidden');
-        }
+      <!-- Projeto 2 -->
+      <div class="card-projeto">
+        <a class="link-projeto" href="https://colab.research.google.com/drive/SEU_ID_DO_COLAB" target="_blank">
+          Projeto 2 — Google Colab
+        </a>
+        <a class="link-aula" href="https://www.youtube.com/watch?v=VIDEO2" target="_blank">
+          📌 Aula do Projeto 2 (YouTube)
+        </a>
+      </div>
 
-        function selectAnswer(selectedIndex) {
-            const question = quizConfig.questions[currentQuestion];
-            const options = document.querySelectorAll('.option-btn');
-            const nextBtn = document.getElementById('next-btn');
-            
-            // Desabilita todos os botões
-            options.forEach(btn => btn.disabled = true);
-            
-            // Mostra resposta correta/incorreta
-            options.forEach((btn, index) => {
-                if (index === question.correct) {
-                    btn.classList.add('correct');
-                } else if (index === selectedIndex && index !== question.correct) {
-                    btn.classList.add('incorrect');
-                }
-            });
-            
-            // Atualiza pontuação
-            if (selectedIndex === question.correct) {
-                score++;
-                document.getElementById('score').textContent = score;
-            }
-            
-            // Salva resposta do usuário
-            userAnswers.push({
-                question: question.question,
-                userAnswer: selectedIndex,
-                correctAnswer: question.correct,
-                explanation: question.explanation
-            });
-            
-            // Mostra botão próxima pergunta
-            nextBtn.classList.remove('hidden');
-        }
+      <!-- Projeto 3 -->
+      <div class="card-projeto">
+        <a class="link-projeto" href="https://github.com/SEU_USUARIO" target="_blank">
+          Projeto 3 — GitHub
+        </a>
+        <a class="link-aula" href="https://www.youtube.com/watch?v=VIDEO3" target="_blank">
+          📌 Aula do Projeto 3 (YouTube)
+        </a>
+      </div>
+    </section>
 
-        function nextQuestion() {
-            currentQuestion++;
-            
-            if (currentQuestion < quizConfig.questions.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        }
+    <section class="secao-redes">
+      <h2 class="secao-titulo">Redes Sociais</h2>
 
-        function showResults() {
-            document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.remove('hidden');
-            
-            document.getElementById('final-score').textContent = score;
-            
-            let message = '';
-            let emoji = '';
-            
-            if (score <= 5) {
-                message = 'Precisa assistir Shrek de novo! 🐸';
-                emoji = '😢';
-            } else if (score <= 8) {
-                message = 'Verdadeiro fã do pântano! 🌿';
-                emoji = '👍';
-            } else {
-                message = 'Você É o Shrek! 👑';
-                emoji = '🎮';
-            }
-            
-            document.getElementById('result-message').textContent = message;
-            document.getElementById('final-emoji').textContent = emoji;
-        }
+      <div class="lista-redes">
+        <a class="rede" href="#" target="_blank">Instagram</a>
+        <a class="rede" href="#" target="_blank">LinkedIn</a>
+        <a class="rede" href="#" target="_blank">GitHub</a>
+      </div>
+    </section>
 
-        function showAnswers() {
-            document.getElementById('result-screen').classList.add('hidden');
-            document.getElementById('answers-screen').classList.remove('hidden');
-            
-            const container = document.getElementById('answers-container');
-            container.innerHTML = '';
-            
-            quizConfig.questions.forEach((q, index) => {
-                const userAnswer = userAnswers[index];
-                const answerDiv = document.createElement('div');
-                answerDiv.className = 'bg-white rounded-xl p-6';
-                
-                answerDiv.innerHTML = `
-                    <h4 class="text-xl font-bold text-green-800 mb-2">Pergunta ${index + 1}: ${q.question}</h4>
-                    <p class="text-lg mb-2"><strong>Sua resposta:</strong> ${q.options[userAnswer.userAnswer]}</p>
-                    <p class="text-lg mb-2"><strong>Resposta correta:</strong> ${q.options[q.correct]}</p>
-                    <p class="text-sm text-gray-600"><strong>Explicação:</strong> ${q.explanation}</p>
-                    <div class="mt-2 text-right">
-                        <span class="inline-block px-3 py-1 rounded-full ${
-                            userAnswer.userAnswer === q.correct ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }">
-                            ${userAnswer.userAnswer === q.correct ? '✅ Correto' : '❌ Incorreto'}
-                        </span>
-                    </div>
-                `;
-                
-                container.appendChild(answerDiv);
-            });
-        }
+  </main>
 
-        function restartQuiz() {
-            currentQuestion = 0;
-            score = 0;
-            userAnswers = [];
-            
-            document.getElementById('score').textContent = '0';
-            document.getElementById('answers-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.add('hidden');
-            document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('start-screen').classList.remove('hidden');
-        }
+  <footer class="rodape">
+    <p>© 2025 — Meu Portfólio</p>
+  </footer>
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Quiz do Shrek carregado! Modifique as perguntas no objeto quizConfig.');
-        });
-    </script>
+  <script src="script.js"></script>
+
 </body>
 </html>
 
+
+  
